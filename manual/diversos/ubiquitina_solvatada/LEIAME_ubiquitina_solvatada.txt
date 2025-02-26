@@ -1,0 +1,65 @@
+ ----------------------------------------------------------------------
+#
+# Sequência de comandos para serem executados no Pymol para gerar imagem
+# de qualidade da caixa contendo a ubequitina e as moléculas de água
+#
+# Obs: O Pymol deve apontar para o diretório onde está a estrutura ou
+#      ao carregar e salvar deve-se informar o caminho completo.
+#
+# ----------------------------------------------------------------------
+
+#
+# 00. Reinicializa o Pymol 
+#
+reinitialize;
+set field_of_view, 20;
+set orthoscopic, off;
+
+#
+# 01. Carregando a estrutura
+#
+load 1ubq_solv.gro, 1ubq_solv;
+
+#
+# 02. Selecionando as águas
+#
+select aguas, resn SOL;
+disable aguas;
+
+#
+# 03. Selecionando a proteína e configurando cores e formato
+#
+select ubiquitina, NOT (resn SOL);
+disable ubiquitina;
+hide everything, ubiquitina;
+show cartoon, ubiquitina;
+spectrum count, rainbow, ubiquitina;
+
+#
+# 04. Zoom e rotação
+#
+zoom center, 46;
+rotate axis=y, angle=-20, state=0;
+rotate axis=x, angle=20, state=0;
+
+#
+# 05. Fundo branco para imagem
+#
+bg_color white;
+
+#
+# 06. Ajustar o nível de detalhes para cartoon (suavização das hélices e folhas)
+#
+set cartoon_sampling, 20, ubiquitina;
+
+#
+# 07. Iluminação
+#
+set ambiente, 0.5;
+set light_count, 3;
+
+#
+# 08. Renderizar a imagem (1920 x 1080 pixels)
+#  - ray width, height
+ray 1920, 1080;
+png ubiquitina_solvatada.png, dpi=300;

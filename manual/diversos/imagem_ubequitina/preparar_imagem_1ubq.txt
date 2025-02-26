@@ -1,0 +1,80 @@
+# ---------------------------------------------------------------------------
+#
+# Sequência de comandos que devem ser executados no Pymol para gerar imagem
+# de qualidade da proteína ubequitina
+#
+# --------------------------------------------------------------------------
+
+#
+# 00. Reinicializa o Pymol
+#
+reinitialize;
+set field_of_view, 20;
+set orthoscopic, off;
+
+#
+# 01. Carregando a estrutura PDB
+#  - Obs: Para que o comando funcione é preciso mudar o diretório de trabalho ("Working Diretory") do Pymol
+#
+load 1ubq.pdb, ubequitina;
+
+#
+# 02. Ocultando todas as águas presentes
+#
+select agua, resn HOH;
+disable agua;
+hide everything, agua;
+
+#
+# 03. Ocultar tudo e mostrar a proteína no modo cartoon
+#
+hide everything, ubequitina;
+show cartoon, ubequitina;
+
+#
+# 04. Modificando as cores das estruuras secundárias da proteína
+#
+spectrum count, rainbow;
+
+#
+# 05. Rotacionando 
+#
+rotate axis=y, angle=-90, state=0;
+rotate axis=z, angle=-40, state=0;
+rotate axis=x, angle=-15, state=0;
+
+#
+# 06. Zoom
+#
+viewport 1920, 1080;
+zoom center, 26;
+
+#
+# 07. Fundo branco para imagem
+#
+bg_color white;
+
+#
+# 08. Melhorando a qualidade da imagem
+#
+set ray_trace_mode, 1;  	# Ativar traçado de raios para melhor qualidade
+set ray_shadows, off;   	# Desativar sombras
+set antialias, 2;       	# Suavização das bordas
+set ray_trace_gain, 0.1;	# Contraste suave nas sombras
+
+#
+# 09. Ajustar o nível de detalhes para cartoon (suavização das hélices e folhas)
+#
+set cartoon_sampling, 20;
+
+#
+# 10. Iluminação
+#
+set ambient, 0.5;
+set light_count, 3;
+
+#
+# 11. Renderizar a imagem (1920 x 1080 pixels)
+#  - ray width, height
+ray 1920, 1080;
+png ubequitina.png, dpi=300;
